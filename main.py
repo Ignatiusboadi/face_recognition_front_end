@@ -1,35 +1,34 @@
-import requests
 from dash.exceptions import PreventUpdate
 from faker import Faker
-from app import app
 from dash import dcc, html, ctx, callback
 from dash.dependencies import Input, Output, State
-from flask import request
 import dash_bootstrap_components as dbc
-import dash_auth
 import cv2
 import os
 import requests
-import time
 
 input_size = 4
 input_offset = 4
 
+from google.cloud import storage
+import os
+
+cred = 'focus-surfer-435213-g6.json'
+
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = cred
+
+
+def upload_to_gcp(source_file_name, destination_folder):
+    bucket_name = 'face-verification-images'
+    destination_blob_name = f'{destination_folder}/{source_file_name}'
+    storage_client = storage.Client()
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.blob(destination_blob_name)
+    blob.upload_from_filename(source_file_name)
+    print(f"File {source_file_name} uploaded to {destination_blob_name}.")
+
+
 api_url = 'http://127.0.0.1:8000'
-#
-# token_url = f'{api_url}/token'
-#
-# auth_data = {
-#     'username': 'user1',
-#     'password': 'user1'
-# }
-#
-# token_response = requests.post(token_url, data=auth_data)
-# if token_response.status_code == 200:
-#     bearer_token = token_response.json().get('access_token')
-#     print(bearer_token)
-#
-#
 layout = html.Div(style={'background-color': 'Azure', 'height': '100vh'}, children=[
     dbc.Row(children=[
         dbc.Col(children=[
@@ -173,7 +172,7 @@ def enroll_user(n_clicks, is_admin, bearer_token, username, password, email):
         }
         enroll_url = f"{api_url}/enroll"
         filename = f"{username}.jpg"
-
+        upload_to_gcp(filename, 'enrollment-images')
         try:
             with open(filename, "rb") as image_file:
                 files = {
@@ -220,7 +219,7 @@ def verify(n_clicks):
 @callback(
     Output('verify-output-message', 'children', allow_duplicate=True),
     [Input('verify-take-picture', 'submit_n_clicks'),
-     Input('token', 'data'),],
+     Input('token', 'data'), ],
     config_prevent_initial_callbacks=True)
 def scan_face_to_verify(n_clicks, access_token):
     if n_clicks > 0:
@@ -243,6 +242,7 @@ def scan_face_to_verify(n_clicks, access_token):
         username = Faker().name()
         if ret:
             filename = f"{username}.jpg"
+            upload_to_gcp(filename, 'verification-images')
             cv2.imwrite(filename, frame)
 
             cap.release()

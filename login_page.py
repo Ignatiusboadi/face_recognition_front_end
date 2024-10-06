@@ -1,9 +1,5 @@
-# login.py
 from dash import dcc, html, Input, Output, State, callback
 from dash.exceptions import PreventUpdate
-
-from app import app
-
 import dash_bootstrap_components as dbc
 import requests
 import datetime
