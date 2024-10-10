@@ -9,13 +9,18 @@ import datetime
 
 email_n = "Once the loading screen finishes, please check your email for a token. Enter the token below and click 'Authenticate'."
 
-# Layout for login page
 layout = html.Div(style={'background-color': 'GhostWhite', 'height': '100vh', 'padding-top': '100px',
-                         'padding-bottom': '100px'},
+                         'padding-bottom': '50px', 'background-image': 'url("/assets/face_ver.png"'},
                   children=[
+                      dbc.Row(children=[
+                          dbc.Col(children=[
+                              html.H2('FACE RECOGNITION SYSTEM',
+                                      style={'textAlign': 'center', 'font-weight': 'bold', 'color': 'red',
+                                             'font-size': '200%'}), ], )], justify='center'),
                       dbc.Container(style={'background-color': 'GhostWhite'}, children=[
                           dbc.Row(children=[
-                              dbc.Col(html.H2("Login", className="text-center mb-4"), width=12)]),
+                              dbc.Col(html.H2("Login", className="text-center mb-4"),
+                                      width=12)]),
                           dbc.Row(children=[
                               dbc.Col(children=[
                                   dbc.Card([

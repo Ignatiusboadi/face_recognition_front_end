@@ -110,7 +110,52 @@ layout = html.Div(style={'background-color': 'Azure', 'height': '100vh'}, childr
                                      style={'color': 'red', 'text-weight': 'bold'}),
                             width=12)])
             ], fluid=True)
-        ])
+        ]),
+        dcc.Tab(label='UNENROLL USER', children=[
+dbc.Container(style={'background-color': 'GhostWhite'}, children=[
+                dbc.Row([
+                    dbc.Col(html.H2("User Registration", className="text-center mb-4"), width=12)
+                ]),
+
+                dbc.Row(children=[
+                    dbc.Col(children=[
+                        dbc.Card([
+                            dbc.CardBody(style={'background-color': 'GhostWhite'}, children=[
+                                dbc.Label("Username:", html_for="username-input"),
+                                dcc.Input(id='enroll-username-input', type='text', placeholder='Enter Username',
+                                          className="form-control mb-3"),
+                                dbc.Label("Password:", html_for="password-input"),
+                                dcc.Input(id='enroll-password-input', type='password', placeholder='Enter Password',
+                                          className="form-control mb-3"),
+                                dbc.Label("Email:", html_for="email-input"),
+                                dcc.Input(id='enroll-email-input', type='email', placeholder='Enter Email',
+                                          className="form-control mb-3"),
+                                dbc.Label("Access:", html_for="email-input"),
+                                dcc.Dropdown(id='enroll-access-type', clearable=False, value=0,
+                                             options=[{'value': 1, 'label': 'Admin Access'},
+                                                      {'value': 0, 'label': 'No Admin Access'}],
+                                             style={'color': 'black'}),
+                                html.Br(),
+                                dbc.Row(children=[dbc.Col(children=[
+                                    dbc.Button("Take Picture", id='enroll-take-pic-btn', color="primary",
+                                               className='text-center', n_clicks=0, outline=True, size='md',
+                                               style={'padding-left': '45px', 'padding-right': '45px'}), ],
+                                    width={'offset': 3}, style={'padding-left': '25px', 'padding-right': '25px'})],
+                                    justify="center"),
+                                html.Br(),
+                                dbc.Row([
+                                    dbc.Col(
+                                        dbc.Button("Unenroll User", id='unenroll-btn', color="success", n_clicks=0,
+                                                   outline=True, className='mt-1', size='md',
+                                                   style={'padding-left': '60px', 'padding-right': '60px'}),
+                                        width={'offset': 3}, style={'padding-left': '35px', 'padding-right': '35px'})],
+                                    justify="center"), ])])], width=4)], justify="center"),
+                dbc.Row([
+                    dbc.Col(html.Div(id='enroll-output-message', className="mt-4 text-center",
+                                     style={'color': 'red', 'text-weight': 'bold'}),
+                            width=12)])
+            ], fluid=True)
+        ]),
     ]),
 ])
 
