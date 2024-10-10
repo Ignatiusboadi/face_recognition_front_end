@@ -5,7 +5,7 @@ import dash_bootstrap_components as dbc
 import login_page as login
 import main
 
-# Define the layout that switches between pages
+
 app.layout = html.Div([
     dcc.Location(id='url', refresh=False),
     html.Div(id='page-content'),
@@ -15,15 +15,14 @@ app.layout = html.Div([
                 width={"size": 2, 'offset': 10})])])
 
 
-# Update page layout based on URL
 @app.callback(Output('page-content', 'children'),
               Input('url', 'pathname'),
               Input('token', 'data'))
 def display_page(pathname, token):
     if pathname == '/' or not token:
-        return login.layout  # Show login page if not authenticated
+        return login.layout
     elif pathname == '/main' and token:
-        return main.layout  # Main page after successful login
+        return main.layout
     else:
         return '404: Page not found'
 
