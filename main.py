@@ -6,7 +6,6 @@ from dash import dcc, html, ctx, callback
 from dash.dependencies import Input, Output, State
 from flask import request
 import dash_bootstrap_components as dbc
-import dash_auth
 import cv2
 import os
 import requests
@@ -197,10 +196,12 @@ def enroll_user(n_clicks, is_admin, bearer_token, username, password, email):
             return f"Error: {response.status_code}, {response.text}"
 
 
-@callback(Output('url', 'pathname'),
+@callback(Output('url', 'pathname', allow_duplicate=True),
           Output('token', 'data'),
           Output('logout', 'n_clicks'),
-          Input('logout', 'n_clicks'))
+          Input('logout', 'n_clicks'),
+          config_prevent_initial_callbacks=True
+          )
 def log_out(n_clicks):
     if n_clicks is None:
         raise PreventUpdate
@@ -209,8 +210,9 @@ def log_out(n_clicks):
 
 
 @callback(Output('verify-take-picture', 'displayed'),
-          Output('enroll-take-pic-btn', 'n_clicks'),
-          Input('verify-btn', 'n_clicks'))
+          Output('enroll-take-pic-btn', 'n_clicks', allow_duplicate=True),
+          Input('verify-btn', 'n_clicks'),
+          config_prevent_initial_callbacks=True)
 def verify(n_clicks):
     if n_clicks:
         return True, 0
