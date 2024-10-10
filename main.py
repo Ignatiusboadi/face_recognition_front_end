@@ -265,7 +265,7 @@ def scan_face_to_verify(n_clicks, access_token):
                     "image": (filename, image_file, "image/jpg")
                 }
                 response = requests.post(face_recognition_url, headers=headers, files=files)
-                # os.remove(filename)
+                os.remove(filename)
             print(response.status_code)
             print(response.json())
             cur_time = datetime.now().strftime("%d/%m/%Y, %H:%M:%S")
