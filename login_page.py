@@ -39,7 +39,7 @@ layout = html.Div(style={'background-color': 'GhostWhite', 'height': '100vh', 'p
                                           dcc.Loading(html.Em(email_n, id='auth-output',
                                                               style={'color': 'green', 'font-size': '13px'}),
                                                       type='default', fullscreen=True,
-                                                      overlay_style={'visibility': 'visible', 'filter': 'blur(2px)'}),
+                                                      overlay_style={'visibility': 'visible', 'filter': 'blur(1px)'}),
                                           dbc.Label("Token:", html_for="token-input"),
                                           dcc.Input(id='token-input', type='text', placeholder='Enter Token',
                                                     className="form-control mb-3"),
@@ -95,10 +95,11 @@ def authenticate_user(syst_token, n_clicks, user_token):
     print('authbtn', datetime.datetime.now(), n_clicks)
     # if n_clicks is None:
     #     raise PreventUpdate
-    if not n_clicks:
-        return '/'
     print('store', syst_token)
     print('input', user_token)
+    if not n_clicks:
+        return '/'
+
     if syst_token is not None and user_token is not None and syst_token == user_token and n_clicks:
         return '/main'
     elif syst_token != user_token and n_clicks:

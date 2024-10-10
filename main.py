@@ -1,35 +1,19 @@
-import requests
 from dash.exceptions import PreventUpdate
 from faker import Faker
 from app import app
 from dash import dcc, html, ctx, callback
 from dash.dependencies import Input, Output, State
-from flask import request
 import dash_bootstrap_components as dbc
-import dash_auth
 import cv2
 import os
 import requests
-import time
+from datetime import datetime
 
 input_size = 4
 input_offset = 4
 
 api_url = 'http://127.0.0.1:8000'
-#
-# token_url = f'{api_url}/token'
-#
-# auth_data = {
-#     'username': 'user1',
-#     'password': 'user1'
-# }
-#
-# token_response = requests.post(token_url, data=auth_data)
-# if token_response.status_code == 200:
-#     bearer_token = token_response.json().get('access_token')
-#     print(bearer_token)
-#
-#
+
 layout = html.Div(style={'background-color': 'Azure', 'height': '100vh'}, children=[
     dbc.Row(children=[
         dbc.Col(children=[
@@ -92,14 +76,16 @@ layout = html.Div(style={'background-color': 'Azure', 'height': '100vh'}, childr
                 message='Your face will be scanned. Kindly look into the camera and click OK when ready.',
             ),
             dbc.Container(children=[
+                html.Br(),
                 dbc.Row(children=[
                     dbc.Col(children=[
-                        dbc.Row(dbc.Col(html.I(id='image-placeholder')), justify='center'),
-                        dbc.Row(dbc.Col(dbc.Button('CLICK TO VERIFY', id='verify', color="success", n_clicks=0,
+                        dbc.Row(dbc.Col(html.Img(id='image-placeholder', src=app.get_asset_url('scan.webp'))),
+                                justify='center'),
+                        dbc.Row(dbc.Col(dbc.Button('CLICK TO VERIFY', id='verify-btn', color="success", n_clicks=0,
                                                    outline=True, className='mt-1', size='md',
-                                                   style={'padding-left': '60px', 'padding-right': '60px'})),
-                                justify='center')
-                    ])
+                                                   style={'padding-left': '60px', 'padding-right': '60px'}),
+                                        width={'size': 2, 'offset': 1}), justify='center')
+                    ], width={'size': 4, 'offset': 4})
                 ]),
                 dbc.Row([
                     dbc.Col(html.Div(id='verify-output-message', className="mt-4 text-center",
@@ -209,7 +195,7 @@ def log_out(n_clicks):
 
 
 @callback(Output('verify-take-picture', 'displayed'),
-          Output('enroll-take-pic-btn', 'n_clicks'),
+          Output('verify-btn', 'n_clicks'),
           Input('verify-btn', 'n_clicks'))
 def verify(n_clicks):
     if n_clicks:
@@ -219,6 +205,7 @@ def verify(n_clicks):
 
 @callback(
     Output('verify-output-message', 'children', allow_duplicate=True),
+    Output('image-placeholder', 'src'),
     [Input('verify-take-picture', 'submit_n_clicks'),
      Input('token', 'data'),],
     config_prevent_initial_callbacks=True)
@@ -237,7 +224,7 @@ def scan_face_to_verify(n_clicks, access_token):
         cap = cv2.VideoCapture(0)
 
         if not cap.isOpened():
-            return "Error: Could not access the camera."
+            return "Error: Could not access the camera.", app.get_asset_url('scan.webp')
 
         ret, frame = cap.read()
         username = Faker().name()
@@ -246,10 +233,10 @@ def scan_face_to_verify(n_clicks, access_token):
             cv2.imwrite(filename, frame)
 
             cap.release()
-            face_recognition_url = 'http://127.0.0.1:8000/face_recognition'
+            face_recognition_url = f'{api_url}/face_recognition'
 
             headers = {
-                'Authorization': f'Bearer {access_token}'  # Pass the token in the Authorization header
+                'Authorization': f'Bearer {access_token}'
             }
 
             with open(filename, "rb") as image_file:
@@ -260,9 +247,15 @@ def scan_face_to_verify(n_clicks, access_token):
                 os.remove(filename)
             print(response.status_code)
             print(response.json())
-            return f"Image taken successfully!"
+            cur_time = datetime.now().strftime("%d/%m/%Y, %H:%M:%S")
+            if response.json().get('recognized') == 1:
+                return f"Verified Successfully at {cur_time}.", app.get_asset_url('authenticated.webp')
+            elif response.json().get('recognized') == 0:
+                return 'Sorry, we could not verify you. Try again or contact the Admin.', app.get_asset_url('scan.webp')
+            else:
+                return response.json().get('message'), app.get_asset_url('scan.webp')
         else:
             cap.release()
-            return "Error: Could not capture image."
+            return "Error: Could not capture image.", app.get_asset_url('scan.webp')
 
-    return ""
+    return "", app.get_asset_url('scan.webp')
