@@ -99,7 +99,7 @@ layout = html.Div(style={'background-color': 'Azure', 'height': '100vh'}, childr
                     dbc.Col(children=[
                         dbc.Row(dbc.Col(html.Img(id='image-placeholder', src=app.get_asset_url('scan.webp'))),
                                 justify='center'),
-                        dbc.Row(dbc.Col(dbc.Button('CLICK TO VERIFY', id='verify-btn', color="success", n_clicks=0,
+                        dbc.Row(dbc.Col(dbc.Button('VERIFY', id='verify-btn', color="success", n_clicks=0,
                                                    outline=True, className='mt-1', size='md',
                                                    style={'padding-left': '60px', 'padding-right': '60px'}),
                                         width={'size': 2, 'offset': 1}), justify='center')
@@ -121,6 +121,9 @@ dbc.Container(style={'background-color': 'GhostWhite'}, children=[
                     dbc.Col(children=[
                         dbc.Card([
                             dbc.CardBody(style={'background-color': 'GhostWhite'}, children=[
+                                dbc.Label("Name:", html_for="enroll-name-input"),
+                                dcc.Input(id='enroll-name-input', type='text', placeholder='Enter Full Name',
+                                          className="form-control mb-3"),
                                 dbc.Label("Username:", html_for="username-input"),
                                 dcc.Input(id='enroll-username-input', type='text', placeholder='Enter Username',
                                           className="form-control mb-3"),
@@ -211,11 +214,12 @@ def scan_face_to_enroll(n_clicks, username):
           Input('enroll-btn', 'n_clicks'),
           Input('enroll-access-type', 'value'),
           Input('token', 'data'),
-          [State('enroll-username-input', 'value'),
+          [State('enroll-name-input', 'value'),
+           State('enroll-username-input', 'value'),
            State('enroll-password-input', 'value'),
            State('enroll-email-input', 'value')]
           )
-def enroll_user(n_clicks, is_admin, bearer_token, username, password, email):
+def enroll_user(n_clicks, is_admin, bearer_token, name, username, password, email):
     if n_clicks > 0:
         headers = {
             'Authorization': f"Bearer {bearer_token}"
@@ -230,6 +234,7 @@ def enroll_user(n_clicks, is_admin, bearer_token, username, password, email):
                 }
 
                 data = {
+                    "name": name,
                     "username": username,
                     "email": email,
                     "is_admin": is_admin,
