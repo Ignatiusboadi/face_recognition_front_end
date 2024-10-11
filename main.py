@@ -121,7 +121,7 @@ layout = html.Div(style={'background-color': 'Azure', 'height': '100vh'}, childr
                 ]),
                 dbc.Row(children=[
                     dbc.Col(children=[
-                        dbc.Card([
+                        dbc.Card(children=[
                             dbc.CardBody(style={'background-color': 'GhostWhite'}, children=[
                                 dbc.Label("Username:", html_for="unenroll-username-input"),
                                 dcc.Input(id='unenroll-username-input', type='text', placeholder='Enter Username',
@@ -135,7 +135,7 @@ layout = html.Div(style={'background-color': 'Azure', 'height': '100vh'}, childr
                                         width={'offset': 3}, style={'padding-left': '35px', 'padding-right': '35px'})],
                                     justify="center"), ])])], width=4)], justify="center"),
                 dbc.Row([
-                    dbc.Col(html.Div(id='enroll-output-message', className="mt-4 text-center",
+                    dbc.Col(html.Div(id='unenroll-output-message', className="mt-4 text-center",
                                      style={'color': 'red', 'text-weight': 'bold'}),
                             width=12)])
             ], fluid=True)
