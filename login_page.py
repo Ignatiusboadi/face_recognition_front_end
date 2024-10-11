@@ -9,9 +9,7 @@ import datetime
 
 email_n = "Once the loading screen finishes, please check your email for a token. Enter the token below and click 'Authenticate'."
 
-layout = html.Div(style={'background-color': 'GhostWhite', 'height': '100vh', 'padding-top': '50px',
-                         'padding-bottom': '50px', 'background-image': 'url("/assets/face_ver.png"'},
-                  children=[
+layout = html.Div(children=[
                       dbc.Row(children=[
                           dbc.Col(children=[
                               html.H2('FACE RECOGNITION SYSTEM',
