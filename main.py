@@ -114,10 +114,10 @@ layout = html.Div(style={'background-color': 'Azure', 'height': '100vh'}, childr
                             width=12)])
             ], fluid=True)
         ]),
-        dcc.Tab(label='UNENROLL USER', children=[
+        dcc.Tab(label='USER DELETION', children=[
             dbc.Container(style={'background-color': 'GhostWhite'}, children=[
                 dbc.Row([
-                    dbc.Col(html.H2("User Registration", className="text-center mb-4"), width=12)
+                    dbc.Col(html.H2("USER DELETION", className="text-center mb-4"), width=12)
                 ]),
                 dbc.Row(children=[
                     dbc.Col(children=[
@@ -129,7 +129,7 @@ layout = html.Div(style={'background-color': 'Azure', 'height': '100vh'}, childr
                                 html.Br(),
                                 dbc.Row([
                                     dbc.Col(
-                                        dbc.Button("Unenroll User", id='unenroll-btn', color="success", n_clicks=0,
+                                        dbc.Button("Delete User", id='unenroll-btn', color="success", n_clicks=0,
                                                    outline=True, className='mt-1', size='md',
                                                    style={'padding-left': '60px', 'padding-right': '60px'}),
                                         width={'offset': 3}, style={'padding-left': '35px', 'padding-right': '35px'})],
