@@ -236,6 +236,8 @@ def update_user(n_clicks, bearer_token, username, name, password, email):
     [Input('enroll-take-picture', 'submit_n_clicks')],
     [State('enroll-username-input', 'value')], config_prevent_initial_callbacks=True)
 def scan_face_to_enroll(n_clicks, username):
+    if not n_clicks:
+        raise PreventUpdate
     if n_clicks > 0:
         video_capture = cv2.VideoCapture(0)
         if not video_capture.isOpened():
@@ -336,10 +338,13 @@ def verify(n_clicks):
 @callback(
     Output('verify-output-message', 'children', allow_duplicate=True),
     Output('image-placeholder', 'src'),
+    Output('verify-take-picture', 'submit_n_clicks'),
     [Input('verify-take-picture', 'submit_n_clicks'),
      Input('token', 'data'), ],
     config_prevent_initial_callbacks=True)
 def scan_face_to_verify(n_clicks, access_token):
+    if not n_clicks:
+        raise PreventUpdate
     if n_clicks > 0:
         video_capture = cv2.VideoCapture(0)
 
@@ -354,7 +359,7 @@ def scan_face_to_verify(n_clicks, access_token):
         cap = cv2.VideoCapture(0)
 
         if not cap.isOpened():
-            return "Error: Could not access the camera.", app.get_asset_url('scan.webp')
+            return "Error: Could not access the camera.", app.get_asset_url('scan.webp'), None
 
         ret, frame = cap.read()
         username = Faker().name()
@@ -378,22 +383,22 @@ def scan_face_to_verify(n_clicks, access_token):
             cur_time = datetime.now().strftime("%d/%m/%Y, %H:%M:%S")
             if response.json().get('recognized') == 1:
                 try:
-                    return f"Verified Successfully at {cur_time}.", app.get_asset_url('authenticated.webp')
+                    return f"Verified Successfully at {cur_time}.", app.get_asset_url('authenticated.webp'), None
                 finally:
                     os.remove(filename)
             elif response.json().get('recognized') == 0:
                 try:
                     return 'Sorry, we could not verify you. Try again or contact the Admin.', app.get_asset_url(
-                        'scan.webp')
+                        'scan.webp'), None
                 finally:
                     os.remove(filename)
             else:
                 try:
-                    return response.json().get('message'), app.get_asset_url('scan.webp')
+                    return response.json().get('message'), app.get_asset_url('scan.webp'), None
                 finally:
                     os.remove(filename)
         else:
             cap.release()
-            return "Error: Could not capture image.", app.get_asset_url('scan.webp')
+            return "Error: Could not capture image.", app.get_asset_url('scan.webp'), None
 
-    return "", app.get_asset_url('scan.webp')
+    return "", app.get_asset_url('scan.webp'), None
