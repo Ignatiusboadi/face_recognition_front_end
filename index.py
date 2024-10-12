@@ -4,6 +4,7 @@ from dash.dependencies import Input, Output
 import dash_bootstrap_components as dbc
 import login_page as login
 import main
+import os
 
 app.layout = html.Div(style={'background-color': 'GhostWhite', 'height': '100vh', 'padding-top': '50px',
                              'padding-bottom': '50px', 'background-image': 'url("/assets/face_ver.png"'},
@@ -30,4 +31,4 @@ def display_page(pathname, token):
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(app.run_server(debug=False, host="0.0.0.0", port=int(os.environ.get("PORT", 8051))))
