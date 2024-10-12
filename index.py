@@ -5,6 +5,7 @@ import dash_bootstrap_components as dbc
 import login_page as login
 import main
 import os
+from app import server
 
 app.layout = html.Div(style={'background-color': 'GhostWhite', 'height': '100vh', 'padding-top': '50px',
                              'padding-bottom': '50px', 'background-image': 'url("/assets/face_ver.png"'},
