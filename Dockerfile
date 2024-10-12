@@ -12,5 +12,5 @@ EXPOSE 8050
 CMD ["python", "/code/plotly-dash-frontend/index.py"]
 
 
-CMD ["gunicorn", "index:server", "--bind", "0.0.0.0:8080"]
+CMD ["gunicorn", "index:server", "--bind", "0.0.0.0:8050"]
 
