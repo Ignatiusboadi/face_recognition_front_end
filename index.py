@@ -5,17 +5,16 @@ import dash_bootstrap_components as dbc
 import login_page as login
 import main
 
-
 app.layout = html.Div(style={'background-color': 'GhostWhite', 'height': '100vh', 'padding-top': '50px',
-                         'padding-bottom': '50px', 'background-image': 'url("/assets/face_ver.png"'},
-                  children=[
-    dcc.Location(id='url', refresh=False),
-    html.Div(id='page-content'),
-    dcc.Store(id='token', data=0),
-    dbc.Row(children=[
-        dbc.Col(html.H5([html.I(className='fa fa-copyright'), ' Group 1 2024'],
-                        style={'padding-top': '85px', 'color': 'white'}),
-                width={"size": 2, 'offset': 10})])])
+                             'padding-bottom': '50px', 'background-image': 'url("/assets/face_ver.png"'},
+                      children=[
+                          dcc.Location(id='url', refresh=False),
+                          html.Div(id='page-content'),
+                          dcc.Store(id='token', data=0),
+                          dbc.Row(children=[
+                              dbc.Col(html.H5([html.I(className='fa fa-copyright'), ' Group 1 2024'],
+                                              style={'padding-top': '85px', 'color': 'white'}),
+                                      width={"size": 2, 'offset': 10})])])
 
 
 @app.callback(Output('page-content', 'children'),
