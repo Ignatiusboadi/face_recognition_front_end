@@ -1,7 +1,6 @@
 from dash import dcc, html, Input, Output, State, callback
 from dash.exceptions import PreventUpdate
-
-# from app import app
+from app import api_url
 
 import dash_bootstrap_components as dbc
 import requests
@@ -73,7 +72,7 @@ layout = html.Div(style={'background-color': 'GhostWhite', 'height': '100vh', 'p
 def generate_token(n_clicks, username, password):
     if not n_clicks or username is None or password is None:
         raise PreventUpdate
-    api_url = 'http://127.0.0.1:8000'
+    # api_url = 'https://face-recognition-image-963201605868.us-central1.run.app'
     token_url = f'{api_url}/token'
 
     auth_data = {
@@ -96,11 +95,11 @@ def generate_token(n_clicks, username, password):
           State('token-input', 'value'),
           config_prevent_initial_callbacks=True)
 def authenticate_user(syst_token, n_clicks, user_token):
-    print('authbtn', datetime.datetime.now(), n_clicks)
+    # print('authbtn', datetime.datetime.now(), n_clicks)
     # if n_clicks is None:
     #     raise PreventUpdate
-    print('store', syst_token)
-    print('input', user_token)
+    # print('store', syst_token)
+    # print('input', user_token)
     if not n_clicks:
         return '/'
 
