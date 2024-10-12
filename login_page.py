@@ -39,19 +39,19 @@ layout = html.Div(children=[
                         dbc.Label("Password:", html_for="password-input"),
                         dcc.Input(id='password-input', type='password', placeholder='Enter Password',
                                   className="form-control mb-3"),
+                        html.Em(id='cred-output-message'),
                         html.Br(),
                         dbc.Row(children=[dbc.Col(children=[
                             dbc.Button("Generate Token", id='token-btn', color="primary",
-                                       className='text-center', outline=True,
-                                       size='md', style={'padding-left': '45px', 'color': 'navyblue',
-                                                         'padding-right': '45px'}), ],
+                                       className='text-center', outline=True, size='md',
+                                       style={'padding-left': '45px', 'padding-right': '45px'}), ],
                             width={'offset': 3},
                             style={'padding-left': '25px', 'padding-right': '25px'})],
                             justify="center"),
-                        dcc.Loading(html.Em(email_n, id='auth-output',
-                                            style={'color': 'green', 'font-size': '13px'}),
-                                    type='default', fullscreen=True,
-                                    overlay_style={'visibility': 'visible', 'filter': 'blur(1px)'}),
+                        html.Br(),
+                        dcc.Loading(html.Em(email_n, id='auth-output', style={'color': 'green', 'font-size': '14px'}),
+                                    type='default', fullscreen=True, ),
+                        html.Br(),
                         dbc.Label("Token:", html_for="token-input"),
                         dcc.Input(id='token-input', type='text', placeholder='Enter Token',
                                   className="form-control mb-3"),
@@ -62,8 +62,7 @@ layout = html.Div(children=[
                                            outline=True, className='mt-1', size='md',
                                            style={'padding-left': '60px', 'padding-right': '60px',
                                                   'color': 'darkgreen'}),
-                                width={'offset': 3},
-                                style={'padding-left': '35px', 'padding-right': '35px'})],
+                                width={'offset': 3}, style={'padding-left': '35px', 'padding-right': '35px'})],
                             justify="center"), ])])], width=4)], justify="center"),
         dbc.Row([
             dbc.Col(html.P(id='output-message', className="mt-4 text-center",
@@ -92,7 +91,7 @@ def generate_token(n_clicks, username, password):
     }
 
     token_response = requests.post(token_url, data=auth_data)
-    print(token_response.status_code)
+    # print(token_response.status_code)
     access_token = token_response.json().get('access_token')
 
     if token_response.status_code == 200:
@@ -106,11 +105,11 @@ def generate_token(n_clicks, username, password):
           State('token-input', 'value'),
           config_prevent_initial_callbacks=True)
 def authenticate_user(syst_token, n_clicks, user_token):
-    print('authbtn', datetime.datetime.now(), n_clicks)
+    # print('authbtn', datetime.datetime.now(), n_clicks)
     if n_clicks is None:
         raise PreventUpdate
-    print('store', syst_token)
-    print('input', user_token)
+    # print('store', syst_token)
+    # print('input', user_token)
     if not n_clicks or not syst_token:
         return '/'
 

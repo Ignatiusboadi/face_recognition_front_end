@@ -3,6 +3,7 @@ from dash.exceptions import PreventUpdate
 from faker import Faker
 from dash import dcc, html, ctx, callback
 from dash.dependencies import Input, Output, State
+from dotenv import load_dotenv
 from google.cloud import storage
 import dash_bootstrap_components as dbc
 import cv2
@@ -13,6 +14,7 @@ from datetime import datetime
 input_size = 4
 input_offset = 4
 
+load_dotenv()
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
 
 
@@ -86,8 +88,7 @@ layout = html.Div(style={'height': '100vh'}, children=[
         dbc.Tab(label="VERIFICATION", children=[
             dcc.ConfirmDialog(
                 id='verify-take-picture', submit_n_clicks=0,
-                message='Your face will be scanned. Kindly look into the camera and click OK when ready.',
-            ),
+                message='Your face will be scanned. Kindly look into the camera and click OK when ready.', ),
             dbc.Container(children=[
                 dbc.Row(dbc.Col(children=[
                     dbc.Card(style={'background-image': 'url("/assets/ver.png"'}, children=[dbc.CardBody(children=[
